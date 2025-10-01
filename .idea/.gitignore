@@ -1,0 +1,52 @@
+# Maven
+/target/
+/pom.xml.tag
+/pom.xml.releaseBackup
+/pom.xml.versionsBackup
+/logs
+/.mvn/timing.properties
+/.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+/*.iml
+*.iws
+*.ipr
+out/
+*.class
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+*.out
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Spring Boot
+/application-*.yml
+/application-*.properties
+!application.yml   # keep base application.yml in git
+
+# Database
+*.db
+*.sql
+
+# Test reports
+/test-output/
+/surefire-reports/
+/jacoco.exec
+
+# Other
+*.bak
+*.swp
