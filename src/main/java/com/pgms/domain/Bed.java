@@ -19,7 +19,13 @@ public class Bed {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BedStatus status = BedStatus.AVAILABLE;
+    @Column(name = "price_override")
     private Double priceOverride;
+    @Column(name = "bed_number", length = 20, nullable = false)
+    private String code;
+    @Column(unique = true, nullable = false)
+    private String slug;
+
 
     public UUID getId() {
         return id;
@@ -55,6 +61,22 @@ public class Bed {
 
     public void setPriceOverride(Double p) {
         priceOverride = p;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     @Override
