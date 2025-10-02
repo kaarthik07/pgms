@@ -3,11 +3,18 @@ package com.pgms.domain;
 import com.pgms.util.Enums.BedStatus;
 import jakarta.persistence.*;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.StringJoiner;
 
 @Entity
-@Table(name = "beds", uniqueConstraints = @UniqueConstraint(columnNames = {"room_id", "bed_index"}))
+@Table(
+        name = "beds",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_bed_room_index", columnNames = {"room_id","bed_index"}),
+                @UniqueConstraint(name = "uk_bed_code", columnNames = {"bed_number"})
+        }
+)
 public class Bed {
     @Id
     @GeneratedValue
@@ -25,6 +32,19 @@ public class Bed {
     private String code;
     @Column(unique = true, nullable = false)
     private String slug;
+    @Column(name = "occupied_at")
+    private OffsetDateTime occupiedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+    @Column(name = "updated_at")
+    private OffsetDateTime updatedAt;
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = OffsetDateTime.now();
+        this.updatedAt = this.createdAt;
+    }
+    @PreUpdate
+    public void preUpdate() { this.updatedAt = OffsetDateTime.now(); }
 
 
     public UUID getId() {
@@ -78,6 +98,9 @@ public class Bed {
     public void setSlug(String slug) {
         this.slug = slug;
     }
+
+    public OffsetDateTime getOccupiedAt() { return occupiedAt; }
+    public void setOccupiedAt(OffsetDateTime occupiedAt) { this.occupiedAt = occupiedAt; }
 
     @Override
     public String toString() {

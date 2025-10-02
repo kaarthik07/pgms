@@ -2,14 +2,17 @@ package com.pgms.service;
 
 import com.pgms.domain.*;
 import com.pgms.dto.TenantDtos.*;
+import com.pgms.exception.BadRequestException;
 import com.pgms.exception.NotFoundException;
 import com.pgms.repo.*;
+import com.pgms.util.Enums;
 import com.pgms.util.Enums.TenantStatus;
 import org.slf4j.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Service
@@ -39,10 +42,17 @@ public class TenantService {
         t.setFatherName(req.fatherName);
         t.setFatherPhone(req.fatherPhone);
         t.setVehicleNumber(req.vehicleNumber);
-        if (req.roomId != null)
-            t.setRoom(rooms.findById(req.roomId).orElseThrow(() -> new NotFoundException("Room not found")));
-        if (req.bedId != null)
-            t.setBed(beds.findById(req.bedId).orElseThrow(() -> new NotFoundException("Bed not found")));
+        if(req.roomId != null){
+            Room room = rooms.findById(req.roomId).orElseThrow(() -> new NotFoundException("Room not found"));
+            t.setRoom(room);
+            if(req.bedIndex != null){
+                Bed bed = beds.findByRoom_IdAndIndex(room.getId(), req.bedIndex)
+                        .orElseThrow(() -> new NotFoundException("Bed index not found in room"));
+                ensureBedAvailable(bed);
+                occupyBed(bed);
+                t.setBed(bed);
+            }
+        }
         tenants.save(t);
         log.info("Created tenant {}", t);
         return t.getId();
@@ -81,5 +91,34 @@ public class TenantService {
 
     public Tenant get(UUID id) {
         return tenants.findById(id).orElseThrow(() -> new NotFoundException("Tenant not found: " + id));
+    }
+
+    /** Throws 400 if bed is not available to allocate. */
+    private void ensureBedAvailable(Bed bed) {
+        if (bed == null) {
+            throw new BadRequestException("Bed is required");
+        }
+        if (bed.getStatus() == Enums.BedStatus.MAINTENANCE) {
+            throw new BadRequestException("Bed is under maintenance");
+        }
+        if (bed.getStatus() == Enums.BedStatus.OCCUPIED) {
+            throw new BadRequestException("Bed is already occupied");
+        }
+        // OK if AVAILABLE
+    }
+
+    /** Marks the bed as occupied and persists it. */
+    private void occupyBed(Bed bed) {
+        bed.setStatus(Enums.BedStatus.OCCUPIED);
+        bed.setOccupiedAt(OffsetDateTime.now());
+        beds.save(bed);
+    }
+
+    /** Optional: free a previously assigned bed (use in update/delete flows). */
+    private void freeBed(Bed bed) {
+        if (bed == null) return;
+        bed.setStatus(Enums.BedStatus.AVAILABLE);
+        bed.setOccupiedAt(null);
+        beds.save(bed);
     }
 }

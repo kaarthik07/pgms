@@ -24,8 +24,13 @@ public class TenantDtos {
         @Pattern(regexp = "^([6-9]\\d{9})?$", message = "Invalid Indian mobile format")
         public String fatherPhone;
         public String vehicleNumber;
+
+        /** Allocation info (optional at onboarding) */
         public UUID roomId;
-        public UUID bedId;
+
+        /** 1-based bed index within the room; only used when roomId is sent */
+        @Min(1)
+        public Integer bedIndex;
 
         @Override
         public String toString() {
@@ -52,6 +57,7 @@ public class TenantDtos {
         public UUID roomId;
         public UUID bedId;
         public TenantStatus status;
+        @Min(1) public Integer bedIndex; // must be sent with roomId if changing bed
 
         @Override
         public String toString() {
