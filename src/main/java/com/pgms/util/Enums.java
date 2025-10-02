@@ -25,4 +25,10 @@ public class Enums {
 
     public enum RoomStatus { AVAILABLE, FULL, MAINTENANCE }
 
+    public enum DueStatus {
+        OPEN,         // recorded and yet to be cleared
+        DISPUTED,     // tenant disputes the amount
+        CLEARED       // cleared/settled (cannot be edited further)
+    }
+
 }

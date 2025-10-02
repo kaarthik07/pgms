@@ -45,6 +45,12 @@ public class TenantService {
         t.setFatherName(req.fatherName);
         t.setFatherPhone(req.fatherPhone);
         t.setVehicleNumber(req.vehicleNumber);
+        // Block onboarding when cross-PG dues exist
+        // implement this logic
+//        if (dueService.hasOpenDues(req.phone, req.govId /* if available */)) {
+//            throw new BadRequestException("Open dues found for this tenant. Please clear before onboarding.");
+//        }
+
         if(req.roomId != null){
             Room room = rooms.findById(req.roomId).orElseThrow(() -> new NotFoundException("Room not found"));
             t.setRoom(room);
