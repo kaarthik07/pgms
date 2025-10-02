@@ -8,7 +8,8 @@ import java.util.Base64;
 import java.util.Locale;
 
 public final class TotpUtil {
-    private TotpUtil(){}
+    private TotpUtil() {
+    }
 
     public static String newBase32Secret() {
         byte[] buf = new byte[20];
@@ -27,7 +28,7 @@ public final class TotpUtil {
 
     public static String otpauthUrl(String issuer, String account, String base32Secret) {
         return "otpauth://totp/" + url(issuer) + ":" + url(account) +
-            "?secret=" + base32Secret + "&issuer=" + url(issuer) + "&digits=6&period=30";
+                "?secret=" + base32Secret + "&issuer=" + url(issuer) + "&digits=6&period=30";
     }
 
     // --- helpers ---
@@ -40,8 +41,8 @@ public final class TotpUtil {
             mac.init(new SecretKeySpec(key, "HmacSHA1"));
             byte[] h = mac.doFinal(msg);
             int offset = h[h.length - 1] & 0x0f;
-            int bin = ((h[offset] & 0x7f) << 24) | ((h[offset+1] & 0xff) << 16) |
-                      ((h[offset+2] & 0xff) << 8) | (h[offset+3] & 0xff);
+            int bin = ((h[offset] & 0x7f) << 24) | ((h[offset + 1] & 0xff) << 16) |
+                    ((h[offset + 2] & 0xff) << 8) | (h[offset + 3] & 0xff);
             int otp = bin % 1_000_000;
             return String.format(Locale.US, "%06d", otp);
         } catch (Exception e) {
@@ -51,29 +52,32 @@ public final class TotpUtil {
 
     // Simple Base32 (RFC 4648) helpers
     private static final String B32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-    private static String base32Encode(byte[] data){
-        StringBuilder out = new StringBuilder((data.length*8+4)/5);
+
+    private static String base32Encode(byte[] data) {
+        StringBuilder out = new StringBuilder((data.length * 8 + 4) / 5);
         int curr = 0, bits = 0;
         for (byte b : data) {
             curr = (curr << 8) | (b & 0xff);
             bits += 8;
             while (bits >= 5) {
-                out.append(B32.charAt((curr >> (bits-5)) & 31));
+                out.append(B32.charAt((curr >> (bits - 5)) & 31));
                 bits -= 5;
             }
         }
-        if (bits > 0) out.append(B32.charAt((curr << (5-bits)) & 31));
+        if (bits > 0) out.append(B32.charAt((curr << (5 - bits)) & 31));
         return out.toString();
     }
-    private static byte[] base32Decode(String s){
+
+    private static byte[] base32Decode(String s) {
         int buffer = 0, bits = 0, count = 0;
-        byte[] out = new byte[s.length()*5/8 + 5];
-        for (char c: s.toUpperCase(Locale.US).toCharArray()){
+        byte[] out = new byte[s.length() * 5 / 8 + 5];
+        for (char c : s.toUpperCase(Locale.US).toCharArray()) {
             int val = B32.indexOf(c);
             if (val < 0) continue;
-            buffer = (buffer << 5) | val; bits += 5;
-            if (bits >= 8){
-                out[count++] = (byte)((buffer >> (bits-8)) & 0xff);
+            buffer = (buffer << 5) | val;
+            bits += 5;
+            if (bits >= 8) {
+                out[count++] = (byte) ((buffer >> (bits - 8)) & 0xff);
                 bits -= 8;
             }
         }
@@ -82,7 +86,7 @@ public final class TotpUtil {
         return res;
     }
 
-    private static String url(String s){
+    private static String url(String s) {
         return java.net.URLEncoder.encode(s, java.nio.charset.StandardCharsets.UTF_8);
     }
 }

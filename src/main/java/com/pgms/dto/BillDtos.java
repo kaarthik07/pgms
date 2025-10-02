@@ -2,6 +2,7 @@ package com.pgms.dto;
 
 import com.pgms.util.Enums;
 import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -12,21 +13,29 @@ public class BillDtos {
 
     // --------- Create Bill ----------
     public static class CreateRequest {
-        @NotBlank public String orgCode;
-        @NotNull public UUID tenantId;
+        @NotBlank
+        public String orgCode;
+        @NotNull
+        public UUID tenantId;
 
-        @NotNull public LocalDate periodStart;
-        @NotNull public LocalDate periodEnd;
+        @NotNull
+        public LocalDate periodStart;
+        @NotNull
+        public LocalDate periodEnd;
 
-        @NotNull public LocalDate dueDate;
+        @NotNull
+        public LocalDate dueDate;
 
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         public BigDecimal rentAmount;
 
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         public BigDecimal utilitiesAmount = BigDecimal.ZERO;
 
-        @NotNull @DecimalMin("0.00")
+        @NotNull
+        @DecimalMin("0.00")
         public BigDecimal discountAmount = BigDecimal.ZERO;
 
         public String notes;
@@ -48,10 +57,13 @@ public class BillDtos {
 
     // --------- Payment (mark paid) ----------
     public static class PaymentRequest {
-        @NotNull public UUID billId;
-        @NotNull @DecimalMin("0.01")
+        @NotNull
+        public UUID billId;
+        @NotNull
+        @DecimalMin("0.01")
         public BigDecimal amount;
-        @NotNull public Enums.PaymentMode mode;
+        @NotNull
+        public Enums.PaymentMode mode;
         public String txnRef;
         public OffsetDateTime paidAt; // optional (defaults to now)
     }
@@ -63,7 +75,9 @@ public class BillDtos {
         public int totalPages;
 
         public PageResponse(List<T> c, long e, int p) {
-            this.content = c; this.totalElements = e; this.totalPages = p;
+            this.content = c;
+            this.totalElements = e;
+            this.totalPages = p;
         }
     }
 }

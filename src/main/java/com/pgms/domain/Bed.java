@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 @Table(
         name = "beds",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_bed_room_index", columnNames = {"room_id","bed_index"}),
+                @UniqueConstraint(name = "uk_bed_room_index", columnNames = {"room_id", "bed_index"}),
                 @UniqueConstraint(name = "uk_bed_code", columnNames = {"bed_number"})
         }
 )
@@ -38,13 +38,17 @@ public class Bed {
     private OffsetDateTime createdAt;
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = OffsetDateTime.now();
         this.updatedAt = this.createdAt;
     }
+
     @PreUpdate
-    public void preUpdate() { this.updatedAt = OffsetDateTime.now(); }
+    public void preUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
 
 
     public UUID getId() {
@@ -99,8 +103,13 @@ public class Bed {
         this.slug = slug;
     }
 
-    public OffsetDateTime getOccupiedAt() { return occupiedAt; }
-    public void setOccupiedAt(OffsetDateTime occupiedAt) { this.occupiedAt = occupiedAt; }
+    public OffsetDateTime getOccupiedAt() {
+        return occupiedAt;
+    }
+
+    public void setOccupiedAt(OffsetDateTime occupiedAt) {
+        this.occupiedAt = occupiedAt;
+    }
 
     @Override
     public String toString() {

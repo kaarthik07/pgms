@@ -32,10 +32,14 @@ public class TenantDtos {
         @Column(name = "updated_at")
         private OffsetDateTime updatedAt;
 
-        /** Allocation info (optional at onboarding) */
+        /**
+         * Allocation info (optional at onboarding)
+         */
         public UUID roomId;
 
-        /** 1-based bed index within the room; only used when roomId is sent */
+        /**
+         * 1-based bed index within the room; only used when roomId is sent
+         */
         @Min(1)
         public Integer bedIndex;
 
@@ -64,7 +68,8 @@ public class TenantDtos {
         public UUID roomId;
         public UUID bedId;
         public TenantStatus status;
-        @Min(1) public Integer bedIndex; // must be sent with roomId if changing bed
+        @Min(1)
+        public Integer bedIndex; // must be sent with roomId if changing bed
 
         @Override
         public String toString() {
@@ -94,36 +99,58 @@ public class TenantDtos {
         }
     }
 
-    /** Query params (all optional) for search. */
+    /**
+     * Query params (all optional) for search.
+     */
     public static class SearchParams {
-        /** Organization code (slug); strongly recommended to pass. */
+        /**
+         * Organization code (slug); strongly recommended to pass.
+         */
         public String orgCode;
 
-        /** Free-text search on name/phone/email. */
+        /**
+         * Free-text search on name/phone/email.
+         */
         @Size(max = 100)
         public String q;
 
-        /** Filter by status. */
+        /**
+         * Filter by status.
+         */
         public TenantStatus status;
 
-        /** Filter by room number (e.g., "101"). */
+        /**
+         * Filter by room number (e.g., "101").
+         */
         public String roomNumber;
 
-        /** 1-based bed index */
+        /**
+         * 1-based bed index
+         */
         public Integer bedIndex;
 
-        /** Optional date range on createdAt (joined date). */
+        /**
+         * Optional date range on createdAt (joined date).
+         */
         public LocalDate createdFrom;
         public LocalDate createdTo;
 
-        /** Pagination & sorting */
-        @Min(0) public Integer page = 0;
-        @Min(1) public Integer size = 20; // default page size
-        /** Spring sort syntax, e.g. "createdAt,desc" or "fullName,asc" */
+        /**
+         * Pagination & sorting
+         */
+        @Min(0)
+        public Integer page = 0;
+        @Min(1)
+        public Integer size = 20; // default page size
+        /**
+         * Spring sort syntax, e.g. "createdAt,desc" or "fullName,asc"
+         */
         public String sort; // optional
     }
 
-    /** Compact summary for list views. */
+    /**
+     * Compact summary for list views.
+     */
     public static class Summary {
         public UUID id;
         public String orgCode;
@@ -136,7 +163,9 @@ public class TenantDtos {
         public java.time.OffsetDateTime createdAt;
     }
 
-    /** Generic page wrapper. */
+    /**
+     * Generic page wrapper.
+     */
     public static class PageResponse<T> {
         public List<T> content;
         public int page;

@@ -9,22 +9,34 @@ import java.util.Set;
 
 public final class MessagePreviewDtos {
 
-    public enum Channel { SMS, WHATSAPP, EMAIL }
+    public enum Channel {SMS, WHATSAPP, EMAIL}
 
     public static class PreviewRequest {
-        /** Channel helps the UI know if a subject is relevant (EMAIL only). */
-        @NotNull public Channel channel;
+        /**
+         * Channel helps the UI know if a subject is relevant (EMAIL only).
+         */
+        @NotNull
+        public Channel channel;
 
-        /** Optional: email subject template (used when channel == EMAIL). */
+        /**
+         * Optional: email subject template (used when channel == EMAIL).
+         */
         public String subjectTemplate;
 
-        /** Required: body template supporting {{placeholders}}. */
-        @NotBlank public String bodyTemplate;
+        /**
+         * Required: body template supporting {{placeholders}}.
+         */
+        @NotBlank
+        public String bodyTemplate;
 
-        /** Variables used to render templates; user-provided take precedence. */
+        /**
+         * Variables used to render templates; user-provided take precedence.
+         */
         public Map<String, String> variables = Collections.emptyMap();
 
-        /** Optional: enrich variables from tenant/org (if present). */
+        /**
+         * Optional: enrich variables from tenant/org (if present).
+         */
         public String tenantId;      // UUID string, optional
         public String organizationId;// UUID string, optional
 

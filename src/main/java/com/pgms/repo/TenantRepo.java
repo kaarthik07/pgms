@@ -13,6 +13,8 @@ public interface TenantRepo extends JpaRepository<Tenant, UUID>, JpaSpecificatio
     Page<Tenant> findByOrgAndStatus(Organization org, TenantStatus status, Pageable pageable);
 
     Page<Tenant> findByOrg(Organization org, Pageable pageable);
+
     boolean existsByBed_Id(UUID bedId);
+
     Optional<Tenant> findByBed_Id(UUID bedId);
 }

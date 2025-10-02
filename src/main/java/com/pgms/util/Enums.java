@@ -21,9 +21,9 @@ public class Enums {
 
     public enum IdProofType {AADHAAR, PAN, PASSPORT, DRIVING_LICENSE, OTHER}
 
-    public enum PaymentStatus { CREATED, CAPTURED, FAILED }
+    public enum PaymentStatus {CREATED, CAPTURED, FAILED}
 
-    public enum RoomStatus { AVAILABLE, FULL, MAINTENANCE }
+    public enum RoomStatus {AVAILABLE, FULL, MAINTENANCE}
 
     public enum DueStatus {
         OPEN,         // recorded and yet to be cleared

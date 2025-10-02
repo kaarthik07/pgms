@@ -68,7 +68,8 @@ public class AuthService {
         if (totpEnabled) {
             if (req.totp == null || !TotpUtil.verifyCode(u.getTotpSecret(), req.totp, System.currentTimeMillis(), 1)) {
                 var r = new LoginResponse();
-                r.requireTotp = true; r.message = "TOTP required or invalid";
+                r.requireTotp = true;
+                r.message = "TOTP required or invalid";
                 return r;
             }
         }
@@ -77,7 +78,9 @@ public class AuthService {
                 u.getEmail(), tokenTtlSec, jwtSecret);
 
         var r = new LoginResponse();
-        r.token = token; r.requireTotp = false; r.message = "OK";
+        r.token = token;
+        r.requireTotp = false;
+        r.message = "OK";
         return r;
     }
 

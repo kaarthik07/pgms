@@ -8,8 +8,10 @@ import java.util.UUID;
 
 public interface ReferralRepo extends JpaRepository<Referral, UUID> {
     List<Referral> findByReferrerId(UUID referrerId);
+
     List<Referral> findByReferredId(UUID referredId);
 
     boolean existsByReferredId(UUID referredId);
+
     boolean existsByReferrerIdAndReferredId(UUID referrerId, UUID referredId);
 }

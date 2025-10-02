@@ -64,7 +64,7 @@ public class RoomService {
     @Transactional
     public void update(RoomDtos.UpdateRequest req) {
         Room room = roomRepo.findById(req.id)
-            .orElseThrow(() -> new NotFoundException("Room not found: " + req.id));
+                .orElseThrow(() -> new NotFoundException("Room not found: " + req.id));
 
         if (!room.getNumber().equals(req.number)) {
             if (roomRepo.existsByNumber(req.number)) {
@@ -113,7 +113,7 @@ public class RoomService {
     @Transactional
     public void delete(UUID roomId) {
         Room room = roomRepo.findById(roomId)
-            .orElseThrow(() -> new NotFoundException("Room not found: " + roomId));
+                .orElseThrow(() -> new NotFoundException("Room not found: " + roomId));
 
         for (Bed b : room.getBeds()) {
             if (tenantRepo.existsByBed_Id(b.getId())) {

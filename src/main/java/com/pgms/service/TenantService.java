@@ -51,10 +51,10 @@ public class TenantService {
 //            throw new BadRequestException("Open dues found for this tenant. Please clear before onboarding.");
 //        }
 
-        if(req.roomId != null){
+        if (req.roomId != null) {
             Room room = rooms.findById(req.roomId).orElseThrow(() -> new NotFoundException("Room not found"));
             t.setRoom(room);
-            if(req.bedIndex != null){
+            if (req.bedIndex != null) {
                 Bed bed = beds.findByRoom_IdAndIndex(room.getId(), req.bedIndex)
                         .orElseThrow(() -> new NotFoundException("Bed index not found in room"));
                 ensureBedAvailable(bed);
@@ -102,7 +102,9 @@ public class TenantService {
         return tenants.findById(id).orElseThrow(() -> new NotFoundException("Tenant not found: " + id));
     }
 
-    /** Throws 400 if bed is not available to allocate. */
+    /**
+     * Throws 400 if bed is not available to allocate.
+     */
     private void ensureBedAvailable(Bed bed) {
         if (bed == null) {
             throw new BadRequestException("Bed is required");
@@ -116,14 +118,18 @@ public class TenantService {
         // OK if AVAILABLE
     }
 
-    /** Marks the bed as occupied and persists it. */
+    /**
+     * Marks the bed as occupied and persists it.
+     */
     private void occupyBed(Bed bed) {
         bed.setStatus(Enums.BedStatus.OCCUPIED);
         bed.setOccupiedAt(OffsetDateTime.now());
         beds.save(bed);
     }
 
-    /** Optional: free a previously assigned bed (use in update/delete flows). */
+    /**
+     * Optional: free a previously assigned bed (use in update/delete flows).
+     */
     private void freeBed(Bed bed) {
         if (bed == null) return;
         bed.setStatus(Enums.BedStatus.AVAILABLE);

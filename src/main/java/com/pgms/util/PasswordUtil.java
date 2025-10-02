@@ -11,7 +11,8 @@ public final class PasswordUtil {
     private static final int ITER = 120_000;
     private static final int KEY_LEN = 256; // bits
 
-    private PasswordUtil() {}
+    private PasswordUtil() {
+    }
 
     public static String hash(String raw) {
         byte[] salt = new byte[SALT_LEN];
@@ -48,6 +49,11 @@ public final class PasswordUtil {
         return diff == 0;
     }
 
-    private static String b64(byte[] x) { return Base64.getEncoder().encodeToString(x); }
-    private static byte[] b64d(String s) { return Base64.getDecoder().decode(s); }
+    private static String b64(byte[] x) {
+        return Base64.getEncoder().encodeToString(x);
+    }
+
+    private static byte[] b64d(String s) {
+        return Base64.getDecoder().decode(s);
+    }
 }

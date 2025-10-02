@@ -10,8 +10,11 @@ import java.util.UUID;
 public final class PaymentDtos {
 
     public static final class CreateOrderRequest {
-        @NotNull public UUID tenantId;
-        @NotNull @Min(1) public BigDecimal amount;  // in rupees
+        @NotNull
+        public UUID tenantId;
+        @NotNull
+        @Min(1)
+        public BigDecimal amount;  // in rupees
         public String currency = "INR";
         public String receipt;                      // optional
         public Map<String, String> notes;          // optional
@@ -106,9 +109,12 @@ public final class PaymentDtos {
     }
 
     public static final class VerifyRequest {
-        @NotNull public String razorpayOrderId;
-        @NotNull public String razorpayPaymentId;
-        @NotNull public String razorpaySignature;
+        @NotNull
+        public String razorpayOrderId;
+        @NotNull
+        public String razorpayPaymentId;
+        @NotNull
+        public String razorpaySignature;
 
         public String getRazorpayOrderId() {
             return razorpayOrderId;

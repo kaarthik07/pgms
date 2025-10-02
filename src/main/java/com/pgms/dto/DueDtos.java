@@ -2,25 +2,33 @@ package com.pgms.dto;
 
 import com.pgms.util.Enums;
 import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
 public final class DueDtos {
 
-    private DueDtos() {}
+    private DueDtos() {
+    }
 
     // --- Create ---
     public static class Create {
-        @NotNull public UUID orgId;
+        @NotNull
+        public UUID orgId;
         public UUID tenantId; // optional
-        @NotBlank public String tenantName;
+        @NotBlank
+        public String tenantName;
         @Pattern(regexp = "^(?:\\+?91)?[6-9]\\d{9}$", message = "Invalid Indian mobile format")
-        @NotBlank public String tenantPhone;
+        @NotBlank
+        public String tenantPhone;
         public String tenantGovId;
 
-        @NotNull @DecimalMin("0.01") public BigDecimal amount;
-        @NotBlank public String reason;
+        @NotNull
+        @DecimalMin("0.01")
+        public BigDecimal amount;
+        @NotBlank
+        public String reason;
 
         public LocalDate fromDate;
         public LocalDate toDate;
@@ -52,10 +60,12 @@ public final class DueDtos {
     }
 
     public static class ClearRequest {
-        @NotBlank public String notes;
+        @NotBlank
+        public String notes;
     }
 
     public static class DisputeRequest {
-        @NotBlank public String notes;
+        @NotBlank
+        public String notes;
     }
 }

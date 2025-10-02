@@ -16,13 +16,17 @@ public class PaymentController {
         this.svc = svc;
     }
 
-    /** Step 1: Backend creates Razorpay Order, frontend gets {orderId, keyId, amountInPaise} */
+    /**
+     * Step 1: Backend creates Razorpay Order, frontend gets {orderId, keyId, amountInPaise}
+     */
     @PostMapping("/orders")
     public ResponseEntity<PaymentDtos.CreateOrderResponse> create(@Valid @RequestBody PaymentDtos.CreateOrderRequest req) throws Exception {
         return ResponseEntity.ok(svc.createOrder(req));
     }
 
-    /** Step 2: Frontend posts the callback data to backend for verification */
+    /**
+     * Step 2: Frontend posts the callback data to backend for verification
+     */
     @PostMapping("/verify")
     public ResponseEntity<Void> verify(@Valid @RequestBody PaymentDtos.VerifyRequest req) throws Exception {
         svc.verifyAndFinalize(req);

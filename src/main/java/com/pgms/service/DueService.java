@@ -42,13 +42,13 @@ public class DueService {
     @Transactional
     public UUID create(DueDtos.Create req) {
         Organization org = orgs.findById(req.orgId)
-            .orElseThrow(() -> new NotFoundException("Org not found: " + req.orgId));
+                .orElseThrow(() -> new NotFoundException("Org not found: " + req.orgId));
 
         Due due = new Due();
         due.setOrg(org);
         if (req.tenantId != null) {
             Tenant t = tenants.findById(req.tenantId)
-                .orElseThrow(() -> new NotFoundException("Tenant not found: " + req.tenantId));
+                    .orElseThrow(() -> new NotFoundException("Tenant not found: " + req.tenantId));
             due.setTenant(t);
         }
         due.setTenantName(req.tenantName);
@@ -94,14 +94,14 @@ public class DueService {
 
     public Page<DueDtos.Summary> search(DueDtos.SearchParams p) {
         Pageable pageable = PageRequest.of(Math.max(0, p.page), Math.min(200, p.size),
-            Sort.by(Sort.Direction.DESC, "createdAt"));
+                Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Specification<Due> spec = Specification
-            .where(DueSpecs.phoneOrNameLike(p.phoneOrName))
-            .and(DueSpecs.withStatus(p.status));
+                .where(DueSpecs.phoneOrNameLike(p.phoneOrName))
+                .and(DueSpecs.withStatus(p.status));
 
         return dues.findAll(spec, pageable)
-            .map(this::toSummary);
+                .map(this::toSummary);
     }
 
     public DueDtos.Detail get(UUID id) {

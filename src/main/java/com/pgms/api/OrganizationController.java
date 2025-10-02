@@ -63,8 +63,10 @@ public class OrganizationController {
             @RequestParam(defaultValue = "name,asc") String sort) {
 
         Sort s = Sort.by(sort.split(",")[0])
-                     .ascending();
-        if (sort.endsWith(",desc")) { s = s.descending(); }
+                .ascending();
+        if (sort.endsWith(",desc")) {
+            s = s.descending();
+        }
 
         Pageable pageable = PageRequest.of(page, size, s);
         return ResponseEntity.ok(svc.search(q, pageable));
@@ -72,13 +74,17 @@ public class OrganizationController {
 
     // --- Branding & code resolve ---
 
-    /** Used by tenant app to theme UI at runtime from org slug */
+    /**
+     * Used by tenant app to theme UI at runtime from org slug
+     */
     @GetMapping("/{slug}/branding")
     public ResponseEntity<OrgDtos.Branding> branding(@PathVariable String slug) {
         return ResponseEntity.ok(svc.brandingBySlug(slug));
     }
 
-    /** Used by QR/code scans to resolve org quickly (returns id/slug/logo etc.) */
+    /**
+     * Used by QR/code scans to resolve org quickly (returns id/slug/logo etc.)
+     */
     @GetMapping("/resolve")
     public ResponseEntity<OrgDtos.Resolve> resolve(@RequestParam String code) {
         return ResponseEntity.ok(svc.resolveByCode(code));

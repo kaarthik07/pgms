@@ -11,5 +11,6 @@ import java.util.UUID;
 
 public interface ReceiptRepo extends JpaRepository<Receipt, UUID>, JpaSpecificationExecutor<Receipt> {
     List<Receipt> findByTenant(Tenant tenant);
+
     List<Receipt> findByOrg(Organization org);
 }

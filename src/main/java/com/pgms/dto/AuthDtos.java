@@ -6,17 +6,29 @@ import jakarta.validation.constraints.*;
 public class AuthDtos {
 
     public static class SignupRequest {
-        @Email @NotBlank public String email;
-        @Pattern(regexp="^([6-9]\\d{9})?$", message="Invalid Indian mobile") public String phone; // optional
-        @NotNull public Role role;
-        @NotBlank @Size(min=8, max=120) public String tempPassword;
+        @Email
+        @NotBlank
+        public String email;
+        @Pattern(regexp = "^([6-9]\\d{9})?$", message = "Invalid Indian mobile")
+        public String phone; // optional
+        @NotNull
+        public Role role;
+        @NotBlank
+        @Size(min = 8, max = 120)
+        public String tempPassword;
     }
 
     public static class LoginRequest {
-        /** email or phone */
-        @NotBlank public String login;
-        @NotBlank public String password;
-        /** optional TOTP code if enabled */
+        /**
+         * email or phone
+         */
+        @NotBlank
+        public String login;
+        @NotBlank
+        public String password;
+        /**
+         * optional TOTP code if enabled
+         */
         public String totp;
     }
 
@@ -27,9 +39,13 @@ public class AuthDtos {
     }
 
     public static class ChangePasswordRequest {
-        @NotBlank public String login;
-        @NotBlank public String oldPassword;
-        @NotBlank @Size(min=8, max=120) public String newPassword;
+        @NotBlank
+        public String login;
+        @NotBlank
+        public String oldPassword;
+        @NotBlank
+        @Size(min = 8, max = 120)
+        public String newPassword;
     }
 
     public static class EnableTotpResponse {
@@ -38,8 +54,12 @@ public class AuthDtos {
     }
 
     public static class AdminResetRequest {
-        @NotBlank public String adminResetCode;
-        @NotBlank public String login;      // user to reset
-        @NotBlank @Size(min=8, max=120) public String newTempPassword;
+        @NotBlank
+        public String adminResetCode;
+        @NotBlank
+        public String login;      // user to reset
+        @NotBlank
+        @Size(min = 8, max = 120)
+        public String newTempPassword;
     }
 }

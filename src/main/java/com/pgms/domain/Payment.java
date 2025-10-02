@@ -1,6 +1,7 @@
 package com.pgms.domain;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.StringJoiner;
@@ -10,7 +11,8 @@ import java.util.UUID;
 @Table(name = "payments")
 public class Payment {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

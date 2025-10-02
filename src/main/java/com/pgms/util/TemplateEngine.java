@@ -60,9 +60,21 @@ public class TemplateEngine {
             this.missing = Collections.unmodifiableSet(missing);
             this.unused = Collections.unmodifiableSet(unused);
         }
-        public String output() { return output; }
-        public Set<String> placeholdersFound() { return found; }
-        public Set<String> placeholdersMissing() { return missing; }
-        public Set<String> variablesUnused(Set<String> providedKeys) { return unused; }
+
+        public String output() {
+            return output;
+        }
+
+        public Set<String> placeholdersFound() {
+            return found;
+        }
+
+        public Set<String> placeholdersMissing() {
+            return missing;
+        }
+
+        public Set<String> variablesUnused(Set<String> providedKeys) {
+            return unused;
+        }
     }
 }

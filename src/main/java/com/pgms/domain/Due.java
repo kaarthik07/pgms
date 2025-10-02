@@ -2,6 +2,7 @@ package com.pgms.domain;
 
 import com.pgms.util.Enums;
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -10,13 +11,13 @@ import java.util.UUID;
 
 @Entity
 @Table(
-    name = "dues",
-    indexes = {
-        @Index(name = "ix_dues_org_id", columnList = "org_id"),
-        @Index(name = "ix_dues_tenant_id", columnList = "tenant_id"),
-        @Index(name = "ix_dues_phone", columnList = "tenant_phone"),
-        @Index(name = "ix_dues_status", columnList = "status")
-    }
+        name = "dues",
+        indexes = {
+                @Index(name = "ix_dues_org_id", columnList = "org_id"),
+                @Index(name = "ix_dues_tenant_id", columnList = "tenant_id"),
+                @Index(name = "ix_dues_phone", columnList = "tenant_phone"),
+                @Index(name = "ix_dues_status", columnList = "status")
+        }
 )
 public class Due {
 
@@ -82,66 +83,148 @@ public class Due {
 
     // --- getters/setters ---
 
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public Organization getOrg() { return org; }
-    public void setOrg(Organization org) { this.org = org; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-    public Tenant getTenant() { return tenant; }
-    public void setTenant(Tenant tenant) { this.tenant = tenant; }
+    public Organization getOrg() {
+        return org;
+    }
 
-    public String getTenantName() { return tenantName; }
-    public void setTenantName(String tenantName) { this.tenantName = tenantName; }
+    public void setOrg(Organization org) {
+        this.org = org;
+    }
 
-    public String getTenantPhone() { return tenantPhone; }
-    public void setTenantPhone(String tenantPhone) { this.tenantPhone = tenantPhone; }
+    public Tenant getTenant() {
+        return tenant;
+    }
 
-    public String getTenantGovId() { return tenantGovId; }
-    public void setTenantGovId(String tenantGovId) { this.tenantGovId = tenantGovId; }
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
 
-    public BigDecimal getAmount() { return amount; }
-    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public String getTenantName() {
+        return tenantName;
+    }
 
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+    }
 
-    public LocalDate getFromDate() { return fromDate; }
-    public void setFromDate(LocalDate fromDate) { this.fromDate = fromDate; }
+    public String getTenantPhone() {
+        return tenantPhone;
+    }
 
-    public LocalDate getToDate() { return toDate; }
-    public void setToDate(LocalDate toDate) { this.toDate = toDate; }
+    public void setTenantPhone(String tenantPhone) {
+        this.tenantPhone = tenantPhone;
+    }
 
-    public Enums.DueStatus getStatus() { return status; }
-    public void setStatus(Enums.DueStatus status) { this.status = status; }
+    public String getTenantGovId() {
+        return tenantGovId;
+    }
 
-    public OffsetDateTime getClearedAt() { return clearedAt; }
-    public void setClearedAt(OffsetDateTime clearedAt) { this.clearedAt = clearedAt; }
+    public void setTenantGovId(String tenantGovId) {
+        this.tenantGovId = tenantGovId;
+    }
 
-    public String getClearedNotes() { return clearedNotes; }
-    public void setClearedNotes(String clearedNotes) { this.clearedNotes = clearedNotes; }
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-    public String getDisputeNotes() { return disputeNotes; }
-    public void setDisputeNotes(String disputeNotes) { this.disputeNotes = disputeNotes; }
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    public String getReason() {
+        return reason;
+    }
 
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public LocalDate getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
+
+    public Enums.DueStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(Enums.DueStatus status) {
+        this.status = status;
+    }
+
+    public OffsetDateTime getClearedAt() {
+        return clearedAt;
+    }
+
+    public void setClearedAt(OffsetDateTime clearedAt) {
+        this.clearedAt = clearedAt;
+    }
+
+    public String getClearedNotes() {
+        return clearedNotes;
+    }
+
+    public void setClearedNotes(String clearedNotes) {
+        this.clearedNotes = clearedNotes;
+    }
+
+    public String getDisputeNotes() {
+        return disputeNotes;
+    }
+
+    public void setDisputeNotes(String disputeNotes) {
+        this.disputeNotes = disputeNotes;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     @PreUpdate
-    public void touch() { this.updatedAt = OffsetDateTime.now(); }
+    public void touch() {
+        this.updatedAt = OffsetDateTime.now();
+    }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", Due.class.getSimpleName() + "[", "]")
-            .add("id=" + id)
-            .add("org=" + (org != null ? org.getId() : null))
-            .add("tenant=" + (tenant != null ? tenant.getId() : null))
-            .add("tenantPhone='" + tenantPhone + "'")
-            .add("amount=" + amount)
-            .add("status=" + status)
-            .toString();
+                .add("id=" + id)
+                .add("org=" + (org != null ? org.getId() : null))
+                .add("tenant=" + (tenant != null ? tenant.getId() : null))
+                .add("tenantPhone='" + tenantPhone + "'")
+                .add("amount=" + amount)
+                .add("status=" + status)
+                .toString();
     }
 }

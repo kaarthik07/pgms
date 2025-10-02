@@ -15,11 +15,11 @@ public interface DueRepo extends JpaRepository<Due, UUID>, JpaSpecificationExecu
 
     // For cross-PG checks during onboarding
     @Query("""
-        select d from Due d
-         where d.status = 'OPEN'
-           and (lower(d.tenantPhone) = lower(:phone)
-                or (coalesce(:govId, '') <> '' and lower(d.tenantGovId) = lower(:govId)))
-    """)
+                select d from Due d
+                 where d.status = 'OPEN'
+                   and (lower(d.tenantPhone) = lower(:phone)
+                        or (coalesce(:govId, '') <> '' and lower(d.tenantGovId) = lower(:govId)))
+            """)
     List<Due> findOpenByIdentifiers(String phone, String govId);
 
     List<Due> findByOrgAndStatus(Organization org, Enums.DueStatus status);

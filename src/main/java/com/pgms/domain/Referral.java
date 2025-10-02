@@ -1,6 +1,7 @@
 package com.pgms.domain;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,18 +28,43 @@ public class Referral {
     private boolean rewardClaimed = false;
 
     // Getters & Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public Tenant getReferrer() { return referrer; }
-    public void setReferrer(Tenant referrer) { this.referrer = referrer; }
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-    public Tenant getReferred() { return referred; }
-    public void setReferred(Tenant referred) { this.referred = referred; }
+    public Tenant getReferrer() {
+        return referrer;
+    }
 
-    public LocalDate getReferredDate() { return referredDate; }
-    public void setReferredDate(LocalDate referredDate) { this.referredDate = referredDate; }
+    public void setReferrer(Tenant referrer) {
+        this.referrer = referrer;
+    }
 
-    public boolean isRewardClaimed() { return rewardClaimed; }
-    public void setRewardClaimed(boolean rewardClaimed) { this.rewardClaimed = rewardClaimed; }
+    public Tenant getReferred() {
+        return referred;
+    }
+
+    public void setReferred(Tenant referred) {
+        this.referred = referred;
+    }
+
+    public LocalDate getReferredDate() {
+        return referredDate;
+    }
+
+    public void setReferredDate(LocalDate referredDate) {
+        this.referredDate = referredDate;
+    }
+
+    public boolean isRewardClaimed() {
+        return rewardClaimed;
+    }
+
+    public void setRewardClaimed(boolean rewardClaimed) {
+        this.rewardClaimed = rewardClaimed;
+    }
 }

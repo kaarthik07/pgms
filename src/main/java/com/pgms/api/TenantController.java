@@ -63,9 +63,10 @@ public class TenantController {
         return ResponseEntity.ok(svc.list(orgCode, status, page, size));
     }
 
-    /** Search + pagination endpoint.
-     *  Example:
-     *  GET /api/v1/tenants?orgCode=v2-colive&q=roh&status=ACTIVE&roomNumber=101&bedIndex=2&page=0&size=20&sort=createdAt,desc
+    /**
+     * Search + pagination endpoint.
+     * Example:
+     * GET /api/v1/tenants?orgCode=v2-colive&q=roh&status=ACTIVE&roomNumber=101&bedIndex=2&page=0&size=20&sort=createdAt,desc
      */
     @GetMapping("/search")
     public ResponseEntity<TenantDtos.PageResponse<TenantDtos.Summary>> search(@Valid TenantDtos.SearchParams params) {

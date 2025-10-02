@@ -56,7 +56,7 @@ public class OrganizationService {
     public void update(OrgDtos.UpdateRequest req) {
         log.debug("Update org {}", req);
         Organization o = repo.findById(req.id)
-            .orElseThrow(() -> new NotFoundException("Organization not found: " + req.id));
+                .orElseThrow(() -> new NotFoundException("Organization not found: " + req.id));
         o.setName(req.name);
         o.setLogoUrl(req.logoUrl);
         o.setPrimaryColor(req.primaryColor);
@@ -86,7 +86,7 @@ public class OrganizationService {
     @Transactional(readOnly = true)
     public OrgDtos.Response get(UUID id) {
         Organization o = repo.findById(id)
-            .orElseThrow(() -> new NotFoundException("Organization not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Organization not found: " + id));
         return toResponse(o);
     }
 
@@ -101,12 +101,12 @@ public class OrganizationService {
             probe.setName(q);
             probe.setSlug(q);
             ExampleMatcher matcher = ExampleMatcher.matchingAny()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                .withIgnorePaths("id", "code", "logoUrl", "primaryColor", "secondaryColor",
-                        "addressLine1", "addressLine2", "city", "state", "pincode",
-                        "contactPhone", "whatsappNumber", "referralBonusCents",
-                        "createdAt", "updatedAt");
+                    .withIgnoreCase()
+                    .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                    .withIgnorePaths("id", "code", "logoUrl", "primaryColor", "secondaryColor",
+                            "addressLine1", "addressLine2", "city", "state", "pincode",
+                            "contactPhone", "whatsappNumber", "referralBonusCents",
+                            "createdAt", "updatedAt");
             page = repo.findAll(Example.of(probe, matcher), pageable);
         }
         return page.map(this::toResponse);
@@ -115,7 +115,7 @@ public class OrganizationService {
     @Transactional(readOnly = true)
     public OrgDtos.Branding brandingBySlug(String slug) {
         Organization o = repo.findBySlug(slug)
-            .orElseThrow(() -> new NotFoundException("Organization not found by slug: " + slug));
+                .orElseThrow(() -> new NotFoundException("Organization not found by slug: " + slug));
         OrgDtos.Branding b = new OrgDtos.Branding();
         b.orgId = o.getId().toString();
         b.name = o.getName();
@@ -129,7 +129,7 @@ public class OrganizationService {
     @Transactional(readOnly = true)
     public OrgDtos.Resolve resolveByCode(String code) {
         Organization o = repo.findByCode(code)
-            .orElseThrow(() -> new NotFoundException("Organization not found by code: " + code));
+                .orElseThrow(() -> new NotFoundException("Organization not found by code: " + code));
         OrgDtos.Resolve r = new OrgDtos.Resolve();
         r.orgId = o.getId();
         r.slug = o.getSlug();

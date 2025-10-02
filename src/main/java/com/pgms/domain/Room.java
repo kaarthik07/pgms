@@ -16,7 +16,8 @@ import java.util.StringJoiner;
         }
 )
 public class Room {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "number", nullable = false, length = 32)
@@ -53,23 +54,68 @@ public class Room {
         this.createdAt = OffsetDateTime.now();
         this.updatedAt = this.createdAt;
     }
-    @PreUpdate
-    public void preUpdate() { this.updatedAt = OffsetDateTime.now(); }
 
-    public UUID getId() { return id; }
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
-    public int getFloorNumber() { return floorNumber; }
-    public void setFloorNumber(int floorNumber) { this.floorNumber = floorNumber; }
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
-    public BigDecimal getBaseRent() { return baseRent; }
-    public void setBaseRent(BigDecimal baseRent) { this.baseRent = baseRent; }
-    public Enums.RoomStatus getStatus() { return status; }
-    public void setStatus(Enums.RoomStatus status) { this.status = status; }
-    public OffsetDateTime getCreatedAt() { return createdAt; }
-    public OffsetDateTime getUpdatedAt() { return updatedAt; }
-    public List<Bed> getBeds() { return beds; }
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public int getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(int floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public BigDecimal getBaseRent() {
+        return baseRent;
+    }
+
+    public void setBaseRent(BigDecimal baseRent) {
+        this.baseRent = baseRent;
+    }
+
+    public Enums.RoomStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(Enums.RoomStatus status) {
+        this.status = status;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public List<Bed> getBeds() {
+        return beds;
+    }
+
     public Organization getOrganization() {
         return organization;
     }

@@ -2,6 +2,7 @@ package com.pgms.dto;
 
 import com.pgms.util.Enums.BedStatus;
 import jakarta.validation.constraints.*;
+
 import java.util.UUID;
 
 public final class BedDtos {
@@ -16,7 +17,8 @@ public final class BedDtos {
     }
 
     public static class UpdateStatusRequest {
-        @NotNull public BedStatus status;
+        @NotNull
+        public BedStatus status;
     }
 
     public static class UpdateRequest {
@@ -24,5 +26,6 @@ public final class BedDtos {
         public Double priceOverride;
     }
 
-    private BedDtos() {}
+    private BedDtos() {
+    }
 }

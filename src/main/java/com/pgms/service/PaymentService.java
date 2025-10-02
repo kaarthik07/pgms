@@ -80,9 +80,9 @@ public class PaymentService {
     public void verifyAndFinalize(PaymentDtos.VerifyRequest req) throws Exception {
         // Build JSON for signature verification
         JSONObject attrs = new JSONObject()
-                .put("razorpay_order_id",   req.getRazorpayOrderId())
+                .put("razorpay_order_id", req.getRazorpayOrderId())
                 .put("razorpay_payment_id", req.getRazorpayPaymentId())
-                .put("razorpay_signature",  req.getRazorpaySignature());
+                .put("razorpay_signature", req.getRazorpaySignature());
 
         boolean ok = Utils.verifyPaymentSignature(attrs, keySecret); // keySecret from config
 
