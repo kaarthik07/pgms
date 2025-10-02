@@ -7,7 +7,17 @@ public class Enums {
 
     public enum NoticeStatus {PENDING, APPROVED, REJECTED, COMPLETED}
 
-    public enum BillStatus {DUE, PARTIAL, PAID, CANCELLED}
+    public enum BillStatus {
+        PENDING,       // created, not yet due or unpaid
+        OVERDUE,       // dueDate passed and not yet fully paid
+        PARTIAL,       // some receipts exist but outstanding > 0
+        PAID,          // fully settled
+        CANCELLED      // voided by owner/admin
+    }
+
+    public enum PaymentMode {
+        CASH, UPI, CARD, BANK_TRANSFER, RAZORPAY
+    }
 
     public enum IdProofType {AADHAAR, PAN, PASSPORT, DRIVING_LICENSE, OTHER}
 
