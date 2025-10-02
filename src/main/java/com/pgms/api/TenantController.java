@@ -1,6 +1,7 @@
 package com.pgms.api;
 
 import com.pgms.domain.Tenant;
+import com.pgms.dto.TenantDtos;
 import com.pgms.dto.TenantDtos.*;
 import com.pgms.service.TenantService;
 import com.pgms.util.Enums.TenantStatus;
@@ -60,5 +61,14 @@ public class TenantController {
     @GetMapping
     public ResponseEntity<Page<Tenant>> list(@RequestParam String orgCode, @RequestParam(required = false) TenantStatus status, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         return ResponseEntity.ok(svc.list(orgCode, status, page, size));
+    }
+
+    /** Search + pagination endpoint.
+     *  Example:
+     *  GET /api/v1/tenants?orgCode=v2-colive&q=roh&status=ACTIVE&roomNumber=101&bedIndex=2&page=0&size=20&sort=createdAt,desc
+     */
+    @GetMapping("/search")
+    public ResponseEntity<TenantDtos.PageResponse<TenantDtos.Summary>> search(@Valid TenantDtos.SearchParams params) {
+        return ResponseEntity.ok(svc.search(params));
     }
 }

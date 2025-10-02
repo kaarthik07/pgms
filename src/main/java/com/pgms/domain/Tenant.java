@@ -4,6 +4,7 @@ import com.pgms.util.Enums.TenantStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.StringJoiner;
 
@@ -31,6 +32,11 @@ public class Tenant {
     private Room room;
     @ManyToOne
     private Bed bed;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private OffsetDateTime updatedAt;
 
     public UUID getId() {
         return id;
@@ -118,6 +124,22 @@ public class Tenant {
 
     public Bed getBed() {
         return bed;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public void setBed(Bed b) {

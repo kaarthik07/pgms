@@ -1,10 +1,12 @@
 package com.pgms.service;
 
 import com.pgms.domain.*;
+import com.pgms.dto.TenantDtos;
 import com.pgms.dto.TenantDtos.*;
 import com.pgms.exception.BadRequestException;
 import com.pgms.exception.NotFoundException;
 import com.pgms.repo.*;
+import com.pgms.service.spec.TenantSpecs;
 import com.pgms.util.Enums;
 import com.pgms.util.Enums.TenantStatus;
 import org.slf4j.*;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TenantService {
@@ -120,5 +123,67 @@ public class TenantService {
         bed.setStatus(Enums.BedStatus.AVAILABLE);
         bed.setOccupiedAt(null);
         beds.save(bed);
+    }
+
+    @Transactional(readOnly = true)
+    public TenantDtos.PageResponse<TenantDtos.Summary> search(TenantDtos.SearchParams p) {
+        // Pageable
+        Pageable pageable = pageableFrom(p);
+
+        // Spec
+        var spec = TenantSpecs.build(p);
+
+        // Query
+        Page<Tenant> page = tenants.findAll(spec, pageable);
+
+        // Map to summaries
+        var content = page.getContent().stream()
+                .map(this::toSummary)
+                .collect(Collectors.toList());
+
+        // Wrap
+        TenantDtos.PageResponse<TenantDtos.Summary> resp = new TenantDtos.PageResponse<>();
+        resp.content = content;
+        resp.page = page.getNumber();
+        resp.size = page.getSize();
+        resp.totalElements = page.getTotalElements();
+        resp.totalPages = page.getTotalPages();
+        resp.first = page.isFirst();
+        resp.last = page.isLast();
+        return resp;
+    }
+
+    private Pageable pageableFrom(TenantDtos.SearchParams p) {
+        // Default sort = createdAt desc (fallback to fullName asc if no createdAt)
+        Sort sort = Sort.unsorted();
+        if (p.sort != null && !p.sort.isBlank()) {
+            // Expects CSV of "field,dir" e.g. "createdAt,desc"
+            String[] parts = p.sort.split(",", 2);
+            String field = parts[0].trim();
+            Sort.Direction dir = (parts.length > 1 && "desc".equalsIgnoreCase(parts[1].trim()))
+                    ? Sort.Direction.DESC : Sort.Direction.ASC;
+            sort = Sort.by(dir, field);
+        } else {
+            // sensible default
+            sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        }
+
+        int page = (p.page != null ? p.page : 0);
+        int size = (p.size != null ? p.size : 20);
+        return PageRequest.of(page, size, sort);
+    }
+
+    private TenantDtos.Summary toSummary(Tenant t) {
+        TenantDtos.Summary s = new TenantDtos.Summary();
+        s.id = t.getId();
+        s.orgCode = t.getOrg() != null ? t.getOrg().getCode() : null;
+        s.fullName = t.getFullName();
+        s.phone = t.getPhone();
+        s.email = t.getEmail();
+        s.status = t.getStatus();
+        s.roomNumber = (t.getRoom() != null ? t.getRoom().getNumber() : null);
+        s.bedIndex = (t.getBed() != null ? t.getBed().getIndex() : null);
+        s.createdAt = t.getCreatedAt(); // ensure you have this field
+        return s;
     }
 }
