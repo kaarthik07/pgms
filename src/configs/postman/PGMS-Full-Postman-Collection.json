@@ -1,0 +1,1265 @@
+{
+  "info": {
+    "_postman_id": "01513bfa-8d88-498b-8c46-5d6569a6ed63",
+    "name": "PGMS – Full API (Frozen)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Full and exhaustive Postman collection for the PG Management System (PGMS).\n- Set env var `baseUrl` (e.g., http://localhost:8080/api/v1)\n- Requests use variables like {{orgCode}}, {{tenantId}}, etc.\n- Raw requests only (no tests), with example payloads and descriptions."
+  },
+  "item": [
+    {
+      "name": "Utilities",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check"
+          }
+        },
+        {
+          "name": "Bootstrap Org (quick)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bootstrap/org/{{orgCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bootstrap",
+                "org",
+                "{{orgCode}}"
+              ]
+            },
+            "description": "Creates an Organization with code {{orgCode}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organizations (Admin)",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"{{orgCode}}\",\n  \"name\": \"V2 CoLive\",\n  \"branding\": {\n    \"primaryColor\": \"#0ea5e9\",\n    \"secondaryColor\": \"#1f2937\",\n    \"logoUrl\": null\n  },\n  \"settings\": {\n    \"defaultDueDay\": 5,\n    \"earlyExitRule\": {\n      \"type\": \"PER_DAY\",\n      \"value\": 500\n    },\n    \"referralBonus\": 150\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Organization by Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{orgCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{orgCode}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Organization Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs/{{orgCode}}/settings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs",
+                "{{orgCode}}",
+                "settings"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"defaultDueDay\": 7,\n  \"earlyExitRule\": {\n    \"type\": \"FLAT\",\n    \"value\": 1000\n  },\n  \"referralBonus\": 150\n}"
+            }
+          }
+        },
+        {
+          "name": "List Orgs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orgs?query=&page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orgs?query=&page=0&size=20"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rooms & Beds (Owner)",
+      "item": [
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"roomNumber\": \"101\",\n  \"floor\": 1,\n  \"capacity\": 3,\n  \"baseRent\": 6000\n}"
+            }
+          }
+        },
+        {
+          "name": "List Rooms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms?orgCode={{orgCode}}&page=0&size=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms?orgCode={{orgCode}}&page=0&size=50"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Get Room",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                "{{roomId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Room",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                "{{roomId}}"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roomNumber\": \"101\",\n  \"floor\": 1,\n  \"capacity\": 3,\n  \"baseRent\": 6500\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Room",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/rooms/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rooms",
+                "{{roomId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Create Bed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/beds",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "beds"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"roomId\": \"{{roomId}}\",\n  \"bedIndex\": 1,\n  \"status\": \"AVAILABLE\",\n  \"priceOverride\": null\n}"
+            }
+          }
+        },
+        {
+          "name": "List Beds by Room",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/beds?roomId={{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "beds?roomId={{roomId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Get Bed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/beds/{{bedId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Bed",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/beds/{{bedId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"MAINTENANCE\",\n  \"priceOverride\": 7000\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Bed",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/beds/{{bedId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "beds",
+                "{{bedId}}"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tenants (Owner/Tenant)",
+      "item": [
+        {
+          "name": "Create Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"fullName\": \"Rohit Kumar\",\n  \"phone\": \"9876543210\",\n  \"email\": \"rohit@example.com\",\n  \"dateOfBirth\": \"1997-09-28\",\n  \"fatherName\": \"Suresh Kumar\",\n  \"fatherPhone\": \"9811111111\",\n  \"vehicleNumber\": \"KA03AB1234\",\n  \"idProofs\": [\n    {\n      \"type\": \"AADHAAR\",\n      \"idNumber\": \"1234 5678 9012\"\n    },\n    {\n      \"type\": \"PAN\",\n      \"idNumber\": \"ABCDE1234F\"\n    }\n  ],\n  \"address\": {\n    \"line1\": \"H.No 12\",\n    \"line2\": \"Sector 2\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"KA\",\n    \"pincode\": \"560066\"\n  },\n  \"stayPlan\": \"MONTHLY\",\n  \"noticeRequiredDays\": 30\n}"
+            }
+          }
+        },
+        {
+          "name": "List Tenants",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants?orgCode={{orgCode}}&status=ACTIVE&page=0&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants?orgCode={{orgCode}}&status=ACTIVE&page=0&size=20"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Get Tenant",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants/{{tenantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Update Tenant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants/{{tenantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Rohit Kumar\",\n  \"phone\": \"9876543210\",\n  \"email\": \"rohit.k@example.com\",\n  \"status\": \"ACTIVE\",\n  \"vehicleNumber\": \"KA03AB1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Tenant",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants/{{tenantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Allocate Tenant -> Room/Bed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants/{{tenantId}}/allocate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}",
+                "allocate"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"roomNumber\": \"101\",\n  \"bedIndex\": 1,\n  \"startDate\": \"2025-10-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Deallocate Tenant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tenants/{{tenantId}}/deallocate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tenants",
+                "{{tenantId}}",
+                "deallocate"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"endDate\": \"2025-10-31\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Billing & Payments",
+      "item": [
+        {
+          "name": "Generate Monthly Bills",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bills/generate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bills",
+                "generate"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"month\": \"2025-10\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Bills",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bills?orgCode={{orgCode}}&status=PENDING&page=0&size=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bills?orgCode={{orgCode}}&status=PENDING&page=0&size=50"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Get Bill",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bills/{{billId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bills",
+                "{{billId}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Mark Bill Paid",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bills/{{billId}}/mark-paid",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bills",
+                "{{billId}}",
+                "mark-paid"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paidOn\": \"2025-10-03\",\n  \"mode\": \"CASH\",\n  \"notes\": \"paid at counter\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "orders"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"billId\": \"{{billId}}\",\n  \"amount\": 6000,\n  \"currency\": \"INR\",\n  \"notes\": {\n    \"purpose\": \"Monthly rent\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Verify Razorpay Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "verify"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"paymentId\": \"{{paymentId}}\",\n  \"signature\": \"sample_signature\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notices (Tenant → Owner)",
+      "item": [
+        {
+          "name": "Tenant Initiates Notice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notices"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantId\": \"{{tenantId}}\",\n  \"orgCode\": \"{{orgCode}}\",\n  \"proposedMoveOutDate\": \"2025-11-05\",\n  \"reason\": \"Relocating\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Owner Reviews Notice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notices/{{noticeId}}/review",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notices",
+                "{{noticeId}}",
+                "review"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"APPROVE\",\n  \"ownerComment\": \"Approved as requested\",\n  \"adjustedMoveOutDate\": \"2025-11-05\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Preview Settlement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notices/{{noticeId}}/settlement/preview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notices",
+                "{{noticeId}}",
+                "settlement",
+                "preview"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"applyEarlyExitRule\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Finalize Settlement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notices/{{noticeId}}/settlement/finalize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notices",
+                "{{noticeId}}",
+                "settlement",
+                "finalize"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"waiveAmount\": 0,\n  \"notes\": \"All good\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cross-PG Dues Registry (Owner/Admin)",
+      "item": [
+        {
+          "name": "Mark Tenant Dues",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dues",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dues"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantId\": \"{{tenantId}}\",\n  \"orgCode\": \"{{orgCode}}\",\n  \"amount\": 1500,\n  \"reason\": \"Left without settlement\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Dues by Phone",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dues/lookup?phone=9876543210",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dues",
+                "lookup?phone=9876543210"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Clear Dues",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dues/clear",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dues",
+                "clear"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantId\": \"{{tenantId}}\",\n  \"orgCode\": \"{{orgCode}}\",\n  \"receiptRef\": \"RCPT-001\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Referrals & Wallet",
+      "item": [
+        {
+          "name": "Generate Referral Link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/referrals/link",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "referrals",
+                "link"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Claim Referral (New PG joins)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/referrals/claim",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "referrals",
+                "claim"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"referralCode\": \"{{referralCode}}\",\n  \"newOrgCode\": \"new-pg-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Wallet",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wallet?orgCode={{orgCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wallet?orgCode={{orgCode}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Apply Wallet during Renewal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wallet/apply",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wallet",
+                "apply"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"amount\": 150\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reminders & Templates",
+      "item": [
+        {
+          "name": "Save Reminder Templates",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/settings/templates",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "settings",
+                "templates"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"reminders\": {\n    \"DUE_REMINDER\": \"Hi {{tenantName}}, your rent {{amount}} is due on {{dueDate}} for room {{room}}.\",\n    \"LATE_REMINDER\": \"Hi {{tenantName}}, your rent is overdue. Please clear {{amount}} immediately.\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Preview Reminder Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reminders/preview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reminders",
+                "preview"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"templateKey\": \"DUE_REMINDER\",\n  \"context\": {\n    \"tenantName\": \"Rohit\",\n    \"amount\": \"\\u20b96,000\",\n    \"dueDate\": \"5 Oct\",\n    \"room\": \"101-1\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Send Manual Reminder (record only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reminders/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reminders",
+                "send"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orgCode\": \"{{orgCode}}\",\n  \"tenantId\": \"{{tenantId}}\",\n  \"channel\": \"WHATSAPP\",\n  \"templateKey\": \"DUE_REMINDER\",\n  \"context\": {\n    \"tenantName\": \"Rohit\",\n    \"amount\": \"\\u20b96,000\",\n    \"dueDate\": \"5 Oct\",\n    \"room\": \"101-1\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports (Owner/Admin)",
+      "item": [
+        {
+          "name": "Collections Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/collections?orgCode={{orgCode}}&from=2025-10-01&to=2025-10-31",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "collections?orgCode={{orgCode}}&from=2025-10-01&to=2025-10-31"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Outstanding Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/outstanding?orgCode={{orgCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "outstanding?orgCode={{orgCode}}"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Occupancy Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reports/occupancy?orgCode={{orgCode}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "occupancy?orgCode={{orgCode}}"
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1"
+    },
+    {
+      "key": "orgCode",
+      "value": "v2-colive"
+    },
+    {
+      "key": "tenantId",
+      "value": ""
+    },
+    {
+      "key": "roomId",
+      "value": ""
+    },
+    {
+      "key": "bedId",
+      "value": ""
+    },
+    {
+      "key": "billId",
+      "value": ""
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    },
+    {
+      "key": "paymentId",
+      "value": ""
+    },
+    {
+      "key": "pgOwnerId",
+      "value": ""
+    },
+    {
+      "key": "noticeId",
+      "value": ""
+    },
+    {
+      "key": "referralCode",
+      "value": ""
+    }
+  ]
+}
