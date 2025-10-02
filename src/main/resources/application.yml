@@ -27,3 +27,9 @@ spring:
 logging:
   level:
     com.pgms: DEBUG
+
+payments:
+  razorpay: #Switch this to read from environment variables with sensible defaults:
+    keyId: temp
+    keySecret: temp
+    webhookSecret: temp   # optional unless you enable webhooks
