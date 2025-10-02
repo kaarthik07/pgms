@@ -33,3 +33,9 @@ payments:
     keyId: temp
     keySecret: temp
     webhookSecret: temp   # optional unless you enable webhooks
+
+auth:
+  jwtSecret: change_this_super_secret_256bit
+  tokenTtlMinutes: 240
+  adminResetCode: VISWA-RESET-2025
+
