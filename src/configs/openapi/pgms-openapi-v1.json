@@ -1,0 +1,2257 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PGMS API",
+    "version": "1.0.0",
+    "description": "Paying Guest Management System \u2013 finalized spec including Login/Auth, Tenants, Orgs, Rooms/Beds, Billing, Receipts, Notices, Settlements, Dues, Referrals, Wallet, Payments (Razorpay), and Message Preview."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Tenants"
+    },
+    {
+      "name": "Organizations"
+    },
+    {
+      "name": "Rooms"
+    },
+    {
+      "name": "Beds"
+    },
+    {
+      "name": "Billing"
+    },
+    {
+      "name": "Receipts"
+    },
+    {
+      "name": "Notices"
+    },
+    {
+      "name": "Settlements"
+    },
+    {
+      "name": "Dues"
+    },
+    {
+      "name": "Referrals"
+    },
+    {
+      "name": "Wallet"
+    },
+    {
+      "name": "Payments"
+    },
+    {
+      "name": "Messages"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Create user with temp password (admin flow)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login with email/phone + password (+optional TOTP)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JWT issued or TOTP required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Change password after login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/enable-totp": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Enable TOTP and return secret + otpauth URL",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "login",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "issuer",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "PGMS"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Secret created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnableTotpResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/admin-reset": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Admin resets user to a new temp password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminResetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/tenants": {
+      "get": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "List tenants (simple filters)",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name/phone contains"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "$ref": "#/components/schemas/TenantStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Page of tenants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageTenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "Create tenant",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants/search": {
+      "post": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "Advanced search (spec-based)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantSearch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Page of tenants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageTenant"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tenants/{id}": {
+      "get": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "Get tenant by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "Update tenant",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tenants"
+        ],
+        "summary": "Delete tenant (blocked if dues or active notice)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/orgs": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "List organizations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Create org",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orgs/{id}": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Get org",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Update org",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Delete org (blocked if rooms/tenants exist)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/rooms": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Create room with capacity & pricing",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "List rooms",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Room"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rooms/{id}": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Get room",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Update room",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Delete room (blocked if occupied beds)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/beds": {
+      "get": {
+        "tags": [
+          "Beds"
+        ],
+        "summary": "List beds",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bed"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/beds/{id}/occupy": {
+      "post": {
+        "tags": [
+          "Beds"
+        ],
+        "summary": "Mark bed occupied by tenant",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/beds/{id}/free": {
+      "post": {
+        "tags": [
+          "Beds"
+        ],
+        "summary": "Mark bed free",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/bills": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Generate bill",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BillCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bill"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "List bills",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "$ref": "#/components/schemas/BillStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Bill"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bills/{id}": {
+      "put": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Update bill (notes/amount)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BillUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bill"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "summary": "Get bill",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bill"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/receipts": {
+      "post": {
+        "tags": [
+          "Receipts"
+        ],
+        "summary": "Record receipt for bill",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Receipt"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Receipts"
+        ],
+        "summary": "List receipts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Receipt"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notices": {
+      "post": {
+        "tags": [
+          "Notices"
+        ],
+        "summary": "Tenant initiates notice",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticeCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notice"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Notices"
+        ],
+        "summary": "List notices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notice"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notices/{id}/review": {
+      "post": {
+        "tags": [
+          "Notices"
+        ],
+        "summary": "Owner reviews notice (approve/reject/modify)",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "decision",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "APPROVE",
+                "REJECT",
+                "MODIFY"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "newMoveOut",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notice"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settlements": {
+      "post": {
+        "tags": [
+          "Settlements"
+        ],
+        "summary": "Create final settlement for tenant",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettlementCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Settlement"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Settlements"
+        ],
+        "summary": "List settlements",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Settlement"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dues": {
+      "get": {
+        "tags": [
+          "Dues"
+        ],
+        "summary": "List dues (cross-PG registry)",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tenantId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Due"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Dues"
+        ],
+        "summary": "Create due (mark unpaid leaving)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DueCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Due"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/referrals": {
+      "post": {
+        "tags": [
+          "Referrals"
+        ],
+        "summary": "Create referral (owner refers another owner)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferralCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Referral"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Referrals"
+        ],
+        "summary": "List referrals",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "referrerOwnerId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Referral"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/wallets/{ownerId}": {
+      "get": {
+        "tags": [
+          "Wallet"
+        ],
+        "summary": "Get owner wallet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ownerId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Wallet"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/razorpay/orders": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create Razorpay order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RzpOrderCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RzpOrder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/razorpay/verify": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Verify Razorpay payment signature",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RzpVerify"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/payments/razorpay/webhook": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Razorpay webhook receiver",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/messages/preview": {
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Preview reminder message with template variables",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessagePreviewReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessagePreviewRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Role": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "OWNER",
+          "TENANT"
+        ]
+      },
+      "TenantStatus": {
+        "type": "string",
+        "enum": [
+          "ACTIVE",
+          "NOTICE",
+          "LEFT"
+        ]
+      },
+      "BillStatus": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "PAID",
+          "PARTIAL",
+          "CANCELLED"
+        ]
+      },
+      "BedStatus": {
+        "type": "string",
+        "enum": [
+          "AVAILABLE",
+          "OCCUPIED",
+          "MAINTENANCE"
+        ]
+      },
+      "SignupRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "role",
+          "tempPassword"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/Role"
+          },
+          "tempPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "login",
+          "password"
+        ],
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "email or phone"
+          },
+          "password": {
+            "type": "string"
+          },
+          "totp": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "requireTotp": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": [
+          "login",
+          "oldPassword",
+          "newPassword"
+        ],
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        }
+      },
+      "EnableTotpResponse": {
+        "type": "object",
+        "properties": {
+          "secretBase32": {
+            "type": "string"
+          },
+          "otpauthUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminResetRequest": {
+        "type": "object",
+        "required": [
+          "adminResetCode",
+          "login",
+          "newTempPassword"
+        ],
+        "properties": {
+          "adminResetCode": {
+            "type": "string"
+          },
+          "login": {
+            "type": "string"
+          },
+          "newTempPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        }
+      },
+      "TenantIdProof": {
+        "type": "object",
+        "required": [
+          "type",
+          "value"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "AADHAAR",
+              "PAN",
+              "OTHER"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "fileUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "TenantCreate": {
+        "type": "object",
+        "required": [
+          "orgId",
+          "fullName",
+          "phone",
+          "rentAmount",
+          "bedId"
+        ],
+        "properties": {
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "fatherPhone": {
+            "type": "string"
+          },
+          "vehicleNumber": {
+            "type": "string"
+          },
+          "idProofs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TenantIdProof"
+            }
+          },
+          "rentAmount": {
+            "type": "number"
+          },
+          "bedId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "TenantUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TenantCreate"
+          }
+        ]
+      },
+      "Tenant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TenantStatus"
+          },
+          "rentAmount": {
+            "type": "number"
+          },
+          "bed": {
+            "$ref": "#/components/schemas/Bed"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageTenant": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tenant"
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "TenantSearch": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TenantStatus"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "branding": {
+            "$ref": "#/components/schemas/Branding"
+          }
+        }
+      },
+      "OrganizationCreate": {
+        "type": "object",
+        "required": [
+          "name",
+          "code"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "branding": {
+            "$ref": "#/components/schemas/Branding"
+          }
+        }
+      },
+      "OrganizationUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrganizationCreate"
+          }
+        ]
+      },
+      "Branding": {
+        "type": "object",
+        "properties": {
+          "logoUrl": {
+            "type": "string"
+          },
+          "primaryColor": {
+            "type": "string"
+          },
+          "secondaryColor": {
+            "type": "string"
+          }
+        }
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomNumber": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "integer"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "baseRent": {
+            "type": "number"
+          }
+        }
+      },
+      "RoomCreate": {
+        "type": "object",
+        "required": [
+          "orgId",
+          "roomNumber",
+          "capacity",
+          "baseRent"
+        ],
+        "properties": {
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomNumber": {
+            "type": "string"
+          },
+          "floor": {
+            "type": "integer"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "baseRent": {
+            "type": "number"
+          }
+        }
+      },
+      "RoomUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RoomCreate"
+          }
+        ]
+      },
+      "Bed": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bedIndex": {
+            "type": "integer"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BedStatus"
+          }
+        }
+      },
+      "Bill": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "month": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BillStatus"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "BillCreate": {
+        "type": "object",
+        "required": [
+          "tenantId",
+          "month",
+          "amount"
+        ],
+        "properties": {
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "month": {
+            "type": "string",
+            "example": "2025-10"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "BillUpdate": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BillStatus"
+          }
+        }
+      },
+      "Receipt": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "billId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReceiptCreate": {
+        "type": "object",
+        "required": [
+          "billId",
+          "amount",
+          "mode"
+        ],
+        "properties": {
+          "billId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "mode": {
+            "type": "string",
+            "example": "CASH|UPI|CARD"
+          }
+        }
+      },
+      "Notice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "requestedMoveOut": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "MODIFIED"
+            ]
+          }
+        }
+      },
+      "NoticeCreate": {
+        "type": "object",
+        "required": [
+          "tenantId",
+          "requestedMoveOut"
+        ],
+        "properties": {
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "requestedMoveOut": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Settlement": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rentDue": {
+            "type": "number"
+          },
+          "utilities": {
+            "type": "number"
+          },
+          "earlyExitFee": {
+            "type": "number"
+          },
+          "discount": {
+            "type": "number"
+          },
+          "finalAmount": {
+            "type": "number"
+          }
+        }
+      },
+      "SettlementCreate": {
+        "type": "object",
+        "required": [
+          "tenantId",
+          "finalAmount"
+        ],
+        "properties": {
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rentDue": {
+            "type": "number"
+          },
+          "utilities": {
+            "type": "number"
+          },
+          "earlyExitFee": {
+            "type": "number"
+          },
+          "discount": {
+            "type": "number"
+          },
+          "finalAmount": {
+            "type": "number"
+          }
+        }
+      },
+      "Due": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "RESOLVED"
+            ]
+          }
+        }
+      },
+      "DueCreate": {
+        "type": "object",
+        "required": [
+          "tenantId",
+          "orgId",
+          "amount",
+          "reason"
+        ],
+        "properties": {
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "orgId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "Referral": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "referrerOwnerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "referredPhone": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CLAIMED",
+              "REJECTED"
+            ]
+          }
+        }
+      },
+      "ReferralCreate": {
+        "type": "object",
+        "required": [
+          "referrerOwnerId",
+          "referredPhone"
+        ],
+        "properties": {
+          "referrerOwnerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "referredPhone": {
+            "type": "string"
+          }
+        }
+      },
+      "Wallet": {
+        "type": "object",
+        "properties": {
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "balance": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "example": "INR"
+          }
+        }
+      },
+      "RzpOrderCreate": {
+        "type": "object",
+        "required": [
+          "amount",
+          "currency",
+          "receipt"
+        ],
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "example": 10000
+          },
+          "currency": {
+            "type": "string",
+            "example": "INR"
+          },
+          "receipt": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "RzpOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "receipt": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "RzpVerify": {
+        "type": "object",
+        "required": [
+          "razorpayOrderId",
+          "razorpayPaymentId",
+          "razorpaySignature"
+        ],
+        "properties": {
+          "razorpayOrderId": {
+            "type": "string"
+          },
+          "razorpayPaymentId": {
+            "type": "string"
+          },
+          "razorpaySignature": {
+            "type": "string"
+          }
+        }
+      },
+      "MessagePreviewReq": {
+        "type": "object",
+        "required": [
+          "template",
+          "variables"
+        ],
+        "properties": {
+          "template": {
+            "type": "string",
+            "example": "Hi {{name}}, your rent {{amount}} for {{month}} is due on {{dueDate}}."
+          },
+          "variables": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MessagePreviewRes": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
