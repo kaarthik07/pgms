@@ -1,68 +1,76 @@
+SET search_path TO pgms, public;
 
--- Sample Dataset for PGMS (PostgreSQL)
+-- Org
+INSERT INTO organizations (id, name, code, logo_url, primary_color, secondary_color)
+VALUES ('00000000-0000-0000-0000-000000000001','V2 CoLive','V2-COLIVE',
+        'https://cdn.example.com/v2/logo.png','#5B8DEF','#111827')
+ON CONFLICT (code) DO NOTHING;
 
--- Insert Admin User
-INSERT INTO users (role, email, phone, password_hash, status)
-VALUES ('ADMIN', 'admin@pgms.com', '9999999999', 'hashed_admin_pw', 'ACTIVE');
+-- Users (password hashes are placeholders)
+INSERT INTO users (id, org_id, role, email, phone, login, password_hash, force_pwd_change, is_active)
+VALUES ('00000000-0000-0000-0000-00000000A001', NULL, 'ADMIN', 'admin@pgms.local', NULL, 'admin@pgms.local', '$2a$10$changeme', FALSE, TRUE)
+ON CONFLICT (login) DO NOTHING;
 
--- Insert PG Owner User
-INSERT INTO users (role, email, phone, password_hash, status)
-VALUES ('OWNER', 'owner@pgms.com', '8888888888', 'hashed_owner_pw', 'ACTIVE');
+INSERT INTO users (id, org_id, role, email, phone, login, password_hash, force_pwd_change, is_active)
+VALUES ('00000000-0000-0000-0000-00000000O001','00000000-0000-0000-0000-000000000001','OWNER','owner1@v2colive.local',
+        '+919999888877','owner1@v2colive.local','$2a$10$changeme', TRUE, TRUE)
+ON CONFLICT (login) DO NOTHING;
 
--- Insert Tenant User
-INSERT INTO users (role, email, phone, password_hash, status)
-VALUES ('TENANT', 'tenant1@pgms.com', '7777777777', 'hashed_tenant_pw', 'ACTIVE');
+-- Rooms & beds
+INSERT INTO rooms (id, org_id, room_number, floor, capacity, base_rent)
+VALUES ('00000000-0000-0000-0000-00000000R101','00000000-0000-0000-0000-000000000001','101',1,3,8500.00)
+ON CONFLICT (org_id, room_number) DO NOTHING;
 
--- Insert PG
-INSERT INTO pgs (owner_id, name, code, address, logo_url, subscription_status)
-VALUES (2, 'V2-Colive', 'V2COLIVE', 'Electronic City, Bangalore', 'http://logo.url/v2.png', 'ACTIVE');
+INSERT INTO beds (id, room_id, bed_index, status) VALUES
+ ('00000000-0000-0000-0000-00000000B101','00000000-0000-0000-0000-00000000R101',1,'AVAILABLE')
+ON CONFLICT DO NOTHING;
+INSERT INTO beds (id, room_id, bed_index, status) VALUES
+ ('00000000-0000-0000-0000-00000000B102','00000000-0000-0000-0000-00000000R101',2,'AVAILABLE')
+ON CONFLICT DO NOTHING;
+INSERT INTO beds (id, room_id, bed_index, status) VALUES
+ ('00000000-0000-0000-0000-00000000B103','00000000-0000-0000-0000-00000000R101',3,'AVAILABLE')
+ON CONFLICT DO NOTHING;
 
--- Insert Rooms
-INSERT INTO rooms (pg_id, room_number, floor_number, capacity, type, price)
-VALUES (1, '101', 1, 2, 'DOUBLE', 12000.00),
-       (1, '102', 1, 3, 'TRIPLE', 15000.00);
+-- Tenant + proofs
+INSERT INTO tenants (id, org_id, full_name, phone, email, status, rent_amount, bed_id)
+VALUES ('00000000-0000-0000-0000-00000000T001','00000000-0000-0000-0000-000000000001',
+        'Karthik Chinni','+919876543210','karthik@example.com','ACTIVE',9500.00,'00000000-0000-0000-0000-00000000B101')
+ON CONFLICT (id) DO NOTHING;
 
--- Insert Beds
-INSERT INTO beds (room_id, bed_number, is_occupied)
-VALUES (1, '101A', FALSE),
-       (1, '101B', FALSE),
-       (2, '102A', FALSE),
-       (2, '102B', FALSE),
-       (2, '102C', FALSE);
+UPDATE beds SET status='OCCUPIED' WHERE id='00000000-0000-0000-0000-00000000B101';
 
--- Insert Tenant
-INSERT INTO tenants (user_id, bed_id, name, phone, father_phone, vehicle_number, id_proofs, status)
-VALUES (3, 1, 'Ramesh Kumar', '7777777777', '6666666666', 'KA05AB1234',
-        '[{"type":"AADHAAR","value":"XXXX-YYYY-ZZZZ"},{"type":"PAN","value":"ABCDE1234F"}]', 'ACTIVE');
+INSERT INTO tenant_id_proofs (tenant_id, proof_type, proof_value, file_url)
+VALUES ('00000000-0000-0000-0000-00000000T001','AADHAAR','1234-5678-9123','https://files.example.com/aadhaar.pdf')
+ON CONFLICT DO NOTHING;
 
--- Insert Bill
-INSERT INTO bills (tenant_id, amount, due_date, status)
-VALUES (1, 12000.00, '2025-10-05', 'PENDING');
+-- Bill (current month)
+INSERT INTO bills (tenant_id, month, amount, status, notes)
+VALUES ('00000000-0000-0000-0000-00000000T001', to_char(CURRENT_DATE,'YYYY-MM'), 9500.00, 'PENDING','Base rent')
+ON CONFLICT (tenant_id, month) DO NOTHING;
 
--- Insert Receipt
-INSERT INTO receipts (bill_id, paid_amount, payment_method)
-VALUES (1, 12000.00, 'Cash');
+-- Notice
+INSERT INTO notices (tenant_id, start_date, requested_move_out, status)
+VALUES ('00000000-0000-0000-0000-00000000T001', CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days', 'PENDING')
+ON CONFLICT DO NOTHING;
 
--- Insert Notice
-INSERT INTO notices (tenant_id, requested_date, status, early_exit_fee)
-VALUES (1, '2025-11-01', 'PENDING', 2000.00);
+-- Dues
+INSERT INTO dues (tenant_id, org_id, amount, reason, status)
+VALUES ('00000000-0000-0000-0000-00000000T001','00000000-0000-0000-0000-000000000001',1500.00,'Unpaid utilities','OPEN')
+ON CONFLICT DO NOTHING;
 
--- Insert Dues
-INSERT INTO dues_registry (tenant_id, pg_id, amount, reason, status)
-VALUES (1, 1, 5000.00, 'Left without paying full rent', 'UNRESOLVED');
+-- Wallet + referral
+INSERT INTO wallets (owner_id, balance, currency)
+VALUES ('00000000-0000-0000-0000-00000000O001', 0, 'INR')
+ON CONFLICT (owner_id) DO NOTHING;
 
--- Insert Referral
-INSERT INTO referrals (referrer_owner_id, bonus_amount, status)
-VALUES (2, 150.00, 'APPROVED');
+INSERT INTO referrals (referrer_owner_id, referred_phone, status)
+VALUES ('00000000-0000-0000-0000-00000000O001', '+919000112233','PENDING')
+ON CONFLICT DO NOTHING;
 
--- Insert Wallet
-INSERT INTO wallets (owner_id, balance)
-VALUES (2, 150.00);
-
--- Insert Reminder
-INSERT INTO reminders (tenant_id, message, status)
-VALUES (1, 'Rent due reminder for October 2025', 'PENDING');
-
--- Insert Payment (Razorpay)
-INSERT INTO payments (tenant_id, order_id, payment_status, amount, method)
-VALUES (1, 'order_123456789', 'SUCCESS', 12000.00, 'Razorpay-UPI');
+-- Payments placeholder: attach to created bill
+INSERT INTO payments (bill_id, tenant_id, razorpay_order_id, amount_paise, currency, status, raw_payload)
+SELECT b.id, '00000000-0000-0000-0000-00000000T001', 'order_demo_1', 950000, 'INR', 'created', '{"demo":true}'::jsonb
+FROM bills b
+WHERE b.tenant_id='00000000-0000-0000-0000-00000000T001'
+  AND b.month = to_char(CURRENT_DATE, 'YYYY-MM')
+ON CONFLICT DO NOTHING;
