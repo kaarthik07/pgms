@@ -190,6 +190,166 @@
       ]
     },
     {
+      "name": "Files (S3)",
+      "item": [
+        {
+          "name": "Upload Tenant ID Proof (multipart)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [
+                    "/path/to/your/aadhaar.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/files/upload?scope=TENANT&refId={{tenantId}}&fileType=ID_PROOF",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "upload"
+              ],
+              "query": [
+                {
+                  "key": "scope",
+                  "value": "TENANT"
+                },
+                {
+                  "key": "refId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "fileType",
+                  "value": "ID_PROOF"
+                }
+              ]
+            },
+            "description": "Uploads an ID proof for a tenant. Select a local file for the 'file' field before sending."
+          }
+        },
+        {
+          "name": "Upload Org Logo (multipart)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [
+                    "/path/to/logo.png"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/files/upload?scope=ORG&refId={{orgCode}}&fileType=LOGO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "upload"
+              ],
+              "query": [
+                {
+                  "key": "scope",
+                  "value": "ORG"
+                },
+                {
+                  "key": "refId",
+                  "value": "{{orgCode}}"
+                },
+                {
+                  "key": "fileType",
+                  "value": "LOGO"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Presigned Download URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/files/{{fileKey}}/url",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "{{fileKey}}",
+                "url"
+              ]
+            },
+            "description": "Returns a temporary presigned URL to download the file from S3."
+          }
+        },
+        {
+          "name": "Delete File",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/files/{{fileKey}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "files",
+                "{{fileKey}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Tenants",
       "item": [
         {
