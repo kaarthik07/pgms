@@ -39,3 +39,9 @@ auth:
   tokenTtlMinutes: 240
   adminResetCode: VISWA-RESET-2025
 
+pgms:
+  storage:
+    provider: s3
+    s3:
+      bucket: pgms-files-prod
+      region: ap-south-1

@@ -1,7 +1,8 @@
 # 🏢 PGMS – Paying Guest Management System
 
 PGMS is a **Spring Boot + PostgreSQL** based backend application for managing PG operations.  
-It handles **Tenant Onboarding, Rooms & Beds allocation, Billing & Receipts, Notices, Dues Registry, Wallet/Referrals, Login/Auth, and Razorpay Integration**.
+It handles **Tenant Onboarding, Rooms & Beds allocation, Billing & Receipts, Notices, Dues Registry, Wallet/Referrals,
+Login/Auth, and Razorpay Integration**.
 
 ---
 
@@ -36,6 +37,7 @@ src/main/java/com/pgms
 ## ⚙️ Setup Instructions
 
 ### 1. Clone Repo
+
 ```bash
 git clone <your-repo-url>
 cd pgms
@@ -44,42 +46,58 @@ cd pgms
 ### 2. Install Dependencies
 
 #### Install Java 21
+
 - **Windows (using Chocolatey):**
+
 ```powershell
 choco install zulu21
 ```
+
 - **Linux (Ubuntu):**
+
 ```bash
 sudo apt update
 sudo apt install openjdk-21-jdk
 ```
+
 - **Verify:**
+
 ```bash
 java -version
 ```
 
 #### Install Maven
+
 - **Windows:**
+
 ```powershell
 choco install maven
 ```
+
 - **Linux:**
+
 ```bash
 sudo apt install maven
 ```
+
 - **Verify:**
+
 ```bash
 mvn -v
 ```
 
 #### Install PostgreSQL 16
+
 - **Windows:** Download from [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
 - **Linux:**
+
 ```bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 ```
+
 - **Verify:**
+
 ```bash
 psql --version
 ```
@@ -87,7 +105,9 @@ psql --version
 ---
 
 ### 3. Configure PostgreSQL
+
 - Create database `pgms`
+
 ```sql
 CREATE DATABASE pgms;
 ```
@@ -101,16 +121,20 @@ CREATE DATABASE pgms;
 > Change in `src/main/resources/application.yml` if required.
 
 ### 4. Run DB Scripts
+
 Inside `docs/db/` you will find:
+
 - `schema.sql` → creates tables with constraints & indexes
 - `sample_data.sql` → inserts demo PG, tenants, rooms, etc.
 
 Run them before starting the app.
 
 ### 5. Start Application
+
 ```bash
 mvn spring-boot:run
 ```
+
 The server starts at:  
 👉 http://localhost:8080/api/v1
 
@@ -130,37 +154,45 @@ The server starts at:
 ## 📌 Features
 
 ### ✅ Tenant Management
+
 - CRUD operations
 - Bed allocation (auto enforce availability)
 - Search + Pagination
 
 ### ✅ Room & Bed Management
+
 - Multi-bed support
 - Bed status: Available / Occupied / Maintenance
 - Tenant allocation enforced
 
 ### ✅ Billing & Receipts
+
 - Generate monthly bills
 - Record receipts & payments
 - Auto update dues
 
 ### ✅ Notices & Settlements
+
 - Serve notice to tenants
 - Track notice period & settlements
 
 ### ✅ Dues Registry
+
 - Maintains outstanding dues
 - Blocks tenant deletion if dues pending
 
 ### ✅ Referrals & Wallet
+
 - Referral credits for tenants
 - Wallet linked to tenant account
 
 ### ✅ Razorpay Integration
+
 - Order creation
 - Payment verification via callback
 
 ### ✅ Message Preview
+
 - API to preview reminder messages before sending
 
 ---
@@ -179,6 +211,7 @@ mvn test
 ```
 
 Covers:
+
 - Unit tests (services, utils)
 - Integration tests (REST endpoints with H2 DB)
 

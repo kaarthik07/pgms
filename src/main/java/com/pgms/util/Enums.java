@@ -31,4 +31,25 @@ public class Enums {
         CLEARED       // cleared/settled (cannot be edited further)
     }
 
+    /**
+     * Visibility of stored files. Keep Aadhaar/PAN PRIVATE.
+     */
+    public enum FileVisibility {
+        PRIVATE,  // serve via presigned URL or backend stream
+        PUBLIC    // can be served via CDN/public URL (e.g., logos/QR)
+    }
+
+    /**
+     * Logical grouping helps with housekeeping and lifecycle rules.
+     */
+    public enum FileCategory {
+        ORG_LOGO,
+        ORG_QR,
+        TENANT_PHOTO,
+        TENANT_ID_PROOF,
+        BILL_PDF,
+        RECEIPT_PDF,
+        OTHER
+    }
+
 }
