@@ -10,13 +10,12 @@ import com.pgms.repo.BedRepo;
 import com.pgms.repo.RoomRepo;
 import com.pgms.repo.TenantRepo;
 import com.pgms.util.Enums;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service

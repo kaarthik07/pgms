@@ -45,3 +45,11 @@ pgms:
     s3:
       bucket: pgms-files-prod
       region: ap-south-1
+  qr:
+    # This is the URL that will be embedded in the QR code.
+    # (For now use a placeholder; FE/mobile will register a handler for this)
+    baseUrl: "https://app.pgms.example/onboard"
+    # HMAC secret to sign invite; keep it safe (env variable in prod)
+    secret: "change-me-please"
+    # link validity in seconds
+    ttlSeconds: 86400  # 24h

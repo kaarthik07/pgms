@@ -2,6 +2,7 @@ package com.pgms.domain;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -65,11 +66,16 @@ public class Organization {
     @Column(name = "whatsapp_number", length = 20)
     private String whatsappNumber;
 
-    /**
-     * Referral incentive in paise/cents
-     */
+    // Referral incentive in paise/cents
     @Column(name = "referral_bonus_cents")
     private Integer referralBonusCents;
+
+    // onboarding
+    @Column(name = "onboarding_code")
+    private String onboardingCode;
+
+    @Column(name = "onboarding_expires_at")
+    private Instant onboardingExpiresAt;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -223,6 +229,22 @@ public class Organization {
 
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getOnboardingCode() {
+        return onboardingCode;
+    }
+
+    public void setOnboardingCode(String onboardingCode) {
+        this.onboardingCode = onboardingCode;
+    }
+
+    public Instant getOnboardingExpiresAt() {
+        return onboardingExpiresAt;
+    }
+
+    public void setOnboardingExpiresAt(Instant onboardingExpiresAt) {
+        this.onboardingExpiresAt = onboardingExpiresAt;
     }
 
     @Override

@@ -5,10 +5,12 @@ import com.pgms.dto.OrgDtos;
 import com.pgms.exception.BadRequestException;
 import com.pgms.exception.NotFoundException;
 import com.pgms.repo.OrganizationRepo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

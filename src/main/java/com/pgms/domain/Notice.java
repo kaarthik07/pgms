@@ -3,8 +3,8 @@ package com.pgms.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.UUID;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Entity
 @Table(name = "notices")

@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Entity
 @Table(

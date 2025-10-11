@@ -1,14 +1,14 @@
 package com.pgms.service;
 
-import com.pgms.domain.Organization;
-import com.pgms.domain.Tenant;
 import com.pgms.dto.MessagePreviewDtos;
 import com.pgms.repo.OrganizationRepo;
 import com.pgms.repo.TenantRepo;
 import com.pgms.util.TemplateEngine;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class MessagePreviewService {

@@ -1,16 +1,27 @@
 package com.pgms.service;
 
-import com.pgms.domain.*;
+import com.pgms.domain.Bed;
+import com.pgms.domain.Organization;
+import com.pgms.domain.Room;
+import com.pgms.domain.Tenant;
 import com.pgms.dto.TenantDtos;
-import com.pgms.dto.TenantDtos.*;
+import com.pgms.dto.TenantDtos.CreateRequest;
+import com.pgms.dto.TenantDtos.UpdateRequest;
 import com.pgms.exception.BadRequestException;
 import com.pgms.exception.NotFoundException;
-import com.pgms.repo.*;
+import com.pgms.repo.BedRepo;
+import com.pgms.repo.OrganizationRepo;
+import com.pgms.repo.RoomRepo;
+import com.pgms.repo.TenantRepo;
 import com.pgms.service.spec.TenantSpecs;
 import com.pgms.util.Enums;
 import com.pgms.util.Enums.TenantStatus;
-import org.slf4j.*;
-import org.springframework.data.domain.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

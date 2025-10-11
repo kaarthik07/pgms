@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tenants")

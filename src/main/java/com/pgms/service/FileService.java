@@ -1,10 +1,10 @@
 package com.pgms.service;
 
-import com.pgms.util.Enums.FileCategory;
 import com.pgms.domain.FileRecord;
 import com.pgms.dto.FileDtos;
 import com.pgms.repo.FileRecordRepo;
 import com.pgms.storage.FileStorage;
+import com.pgms.util.Enums.FileCategory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
@@ -15,8 +15,6 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
-
-import static com.pgms.util.Enums.FileCategory.*;
 
 @Slf4j
 @Service

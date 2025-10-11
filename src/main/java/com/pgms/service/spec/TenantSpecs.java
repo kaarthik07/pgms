@@ -2,12 +2,11 @@ package com.pgms.service.spec;
 
 import com.pgms.domain.Tenant;
 import com.pgms.dto.TenantDtos;
-import com.pgms.util.Enums;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.OffsetDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 
 public final class TenantSpecs {
 

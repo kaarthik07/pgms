@@ -1,9 +1,11 @@
 package com.pgms.repo;
 
-import com.pgms.domain.*;
+import com.pgms.domain.Organization;
+import com.pgms.domain.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface RoomRepo extends JpaRepository<Room, UUID> {

@@ -4,7 +4,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Locale;
 
 public final class TotpUtil {

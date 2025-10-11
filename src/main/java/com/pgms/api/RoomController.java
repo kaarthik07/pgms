@@ -3,7 +3,6 @@ package com.pgms.api;
 import com.pgms.dto.BedDtos;
 import com.pgms.dto.RoomDtos;
 import com.pgms.service.RoomService;
-
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

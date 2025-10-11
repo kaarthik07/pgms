@@ -1,7 +1,7 @@
 package com.pgms.dto;
 
 import com.pgms.util.Enums.BedStatus;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
