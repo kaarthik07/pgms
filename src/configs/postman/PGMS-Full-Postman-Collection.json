@@ -1585,6 +1585,134 @@
           }
         }
       ]
+    },
+    {
+      "name": "QR",
+      "item": [
+        {
+          "name": "1) Create Invite (Meta)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orgs/{{orgCode}}/qr/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orgs", "{{orgCode}}", "qr", "meta"]
+            },
+            "description": "Creates a fresh onboarding invite for an organization and returns deep-link components."
+          },
+          "response": [
+            {
+              "name": "Example 200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": "{{baseUrl}}/api/v1/orgs/{{orgCode}}/qr/meta"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"orgCode\": \"v2-colive\",\n  \"invite\": \"ABC12XYZ\",\n  \"ts\": 1730488840,\n  \"sig\": \"dZrW2nZ5...\",\n  \"deepLink\": \"https://app.pgms.example/onboard?org=v2-colive&invite=ABC12XYZ&ts=1730488840&sig=dZrW2nZ5...\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set(\"invite\", data.invite);",
+                  "pm.collectionVariables.set(\"ts\", data.ts);",
+                  "pm.collectionVariables.set(\"sig\", data.sig);",
+                  "pm.collectionVariables.set(\"deepLink\", data.deepLink);",
+                  "pm.test(\"Invite variables saved\", function () {",
+                  "  pm.expect(pm.collectionVariables.get(\"invite\")).to.exist;",
+                  "  pm.expect(pm.collectionVariables.get(\"sig\")).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "2) Generate QR PNG",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "image/png" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/orgs/{{orgCode}}/qr?size=320",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "orgs", "{{orgCode}}", "qr"],
+              "query": [
+                { "key": "size", "value": "320" }
+              ]
+            },
+            "description": "Returns the QR image (PNG) for the latest invite. In Postman use **Save Response > Save to a file**."
+          },
+          "response": []
+        },
+        {
+          "name": "3) Resolve Onboarding",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/onboarding/resolve?org={{orgCode}}&invite={{invite}}&ts={{ts}}&sig={{sig}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "onboarding", "resolve"],
+              "query": [
+                { "key": "org", "value": "{{orgCode}}" },
+                { "key": "invite", "value": "{{invite}}" },
+                { "key": "ts", "value": "{{ts}}" },
+                { "key": "sig", "value": "{{sig}}" }
+              ]
+            },
+            "description": "Validates the signed deep-link and returns org details and temporary password for autofill."
+          },
+          "response": [
+            {
+              "name": "Example 200",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{baseUrl}}/api/v1/onboarding/resolve?org={{orgCode}}&invite={{invite}}&ts={{ts}}&sig={{sig}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"orgCode\": \"v2-colive\",\n  \"orgName\": \"V2 Colive\",\n  \"contactPhone\": \"+91-9876543210\",\n  \"address\": \"HSR Layout, BLR\",\n  \"tempPassword\": \"ABC12XYZ\",\n  \"expiresAt\": \"2025-10-02T18:00:00Z\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "const data = pm.response.json();",
+                  "pm.test(\"Has tempPassword\", function () {",
+                  "  pm.expect(data.tempPassword).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
@@ -1630,6 +1758,31 @@
     },
     {
       "key": "jwt",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orgCode",
+      "value": "v2-colive",
+      "type": "string"
+    },
+    {
+      "key": "invite",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ts",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sig",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "deepLink",
       "value": "",
       "type": "string"
     }
